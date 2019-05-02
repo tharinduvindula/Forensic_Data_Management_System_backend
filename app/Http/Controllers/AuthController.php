@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser']]);
+        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser','getalluser','getuser']]);
     }
 
     /**
@@ -91,24 +91,38 @@ class AuthController extends Controller
 
     public function adduser(Request $request)
     {
-        User::create($request->all());
+        $ser=User::create($request->all());
+    }
+
+    public function getalluser(){
+
+        $records =DB::table('users')
+            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','id')
+            ->orderBy('usertype', 'Desc')
+            ->get();
+    if($records==null){
+            return response()->json(['error' => 'somthing wrong'], 401);
+        }
+        return response()->json($records);
+
+    }
+    public function getuser(Request $request){
+
+        $records =DB::table('users')
+            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate')
+            ->where('email','=',request(['email']))
+            ->first();
+        if($records==null){
+            return response()->json(['error' => 'somthing wrong'], 401);
+        }
+        return response()->json($records);
 
     }
 
+
+
     public function updateuser(Request $request)
     {
-        /*$result=DB::table('users')
-            ->where('email', request(['oldemail']))
-            ->update(
-                [
-                'fullname' => request(['fullname']),
-                'firstname' => request(['firstname']),
-                'lastname' => request(['lastname']),
-                'address' => request(['address']),
-                'sex' => request(['sex']),
-                'email' => request(['email']),
-                'telephone' => request(['telephone'])
-                ]);*/
 
         DB::table('users')->updateOrInsert(
             [
@@ -125,8 +139,6 @@ class AuthController extends Controller
 
             ]
         );
-        $credentials = request(['email', 'password']);
-
     }
 
 }
