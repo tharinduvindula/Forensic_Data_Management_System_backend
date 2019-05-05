@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser','getalluser','getuser']]);
+        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser','getalluser','getuser','deleteuser','temporydisable']]);
     }
 
     /**
@@ -30,12 +30,36 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
         $items = DB::table('users')
-             ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate')
+             ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','addingby','lasteditby','photo')
              ->where('email','=',request(['email']))
+             ->first();
+        $loginaccess = DB::table('users')
+            ->where('email','=',request(['email']))
+             ->select('loginaccess')
+             ->pluck('loginaccess')
+             ->first();
+        $permenetdiseble = DB::table('users')
+             ->where('email','=',request(['email']))
+             ->select('permenetdisable')
+             ->pluck('permenetdisable')
+             ->first();
+        $temporydisable = DB::table('users')
+             ->where('email','=',request(['email']))
+             ->select('temporydisable')
+             ->pluck('temporydisable')
              ->first();
 
         if (!$token = auth()->claims(['ud' => $items])->attempt($credentials)) {
             return response()->json(['error' => 'Email or password does\'t exist'], 401);
+        }
+        if($loginaccess==0){
+            return response()->json(['error' => 'your Email not verified please verify your email'], 401);
+        }
+        if($permenetdiseble==1){
+            return response()->json(['error' => 'your Account is remove from system '], 401);
+        }
+        if($temporydisable==1){
+            return response()->json(['error' => 'your Account is tempory disable '], 401);
         }
 
         return $this->respondWithToken($token);
@@ -91,13 +115,15 @@ class AuthController extends Controller
 
     public function adduser(Request $request)
     {
-        $ser=User::create($request->all());
+        $user=User::create($request->all());
+        return response()->json($user);
     }
 
     public function getalluser(){
 
         $records =DB::table('users')
-            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','id')
+            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','id','addingby','lasteditby'
+            ,'temporydisable', 'permenetdisable','photo' )
             ->orderBy('usertype', 'Desc')
             ->get();
     if($records==null){
@@ -109,7 +135,7 @@ class AuthController extends Controller
     public function getuser(Request $request){
 
         $records =DB::table('users')
-            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate')
+            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','addingby','lasteditby','photo')
             ->where('email','=',request(['email']))
             ->first();
         if($records==null){
@@ -119,12 +145,44 @@ class AuthController extends Controller
 
     }
 
+    public function deleteuser(Request $request)
+    {
+
+        $user=DB::table('users')->updateOrInsert(
+            [
+                'email' => $request->get('email'),
+            ],
+            [
+                'permenetdisable' => true,
+                'lasteditby' => $request->get('lasteditby'),
+                'enddate'=> date('Y-m-d H:i:s')
+            ]
+
+        );
+        return response()->json($user);
+
+    }
+
+    public function temporydisable(Request $request)
+    {
+      $user=DB::table('users')->updateOrInsert(
+            [
+                'email' => $request->get('email'),
+            ],
+            [
+                'temporydisable' => $request->input('temporydisable')
+            ]
+
+        );
+        return response()->json($user);
+
+    }
 
 
     public function updateuser(Request $request)
     {
 
-        DB::table('users')->updateOrInsert(
+        $user=DB::table('users')->updateOrInsert(
             [
                 'email' => $request->get('oldemail'),
             ],
@@ -135,10 +193,16 @@ class AuthController extends Controller
                 'address' => $request->get('address'),
                 'sex' => $request->get('sex'),
                 'email' => $request->get('email'),
-                'telephone' => $request->get('telephone')
+                'telephone' => $request->get('telephone'),
+                'lasteditby' => $request->get('lasteditby'),
+                'photo' => $request->get('photo'),
+
+
 
             ]
         );
+        return response()->json($user);
+
     }
 
 }

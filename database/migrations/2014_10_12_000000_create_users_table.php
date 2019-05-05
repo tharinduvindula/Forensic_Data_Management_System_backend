@@ -24,7 +24,14 @@ class CreateUsersTable extends Migration
             $table->string('address');
             $table->integer('telephone');
             $table->string('startdate');
+            $table->string('enddate');
             $table->string('usertype');
+            $table->string('photo');
+            $table->string('addingby');
+            $table->string('lasteditby');
+            $table->boolean('loginaccess');
+            $table->boolean('temporydisable');
+            $table->boolean('permenetdisable');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
