@@ -29,8 +29,10 @@ Route::group([
     Route::get('getalluser', 'AuthController@getalluser');
     Route::post('getuser', 'AuthController@getuser');
     Route::post('temporarydisable', 'AuthController@temporydisable');
+    Route::post('defaultpassword', 'AuthController@defaultpassword');
     Route::post('multiuserhandleforuser', 'multiuserhandle@userprofilehandle');
     Route::post('multiuserhandleforrecode', 'multiuserhandle@recodehandle');
     Route::post('removmultiuserhandle', 'multiuserhandle@removefromuserprofilehandle');
-
+    Route::post('sendPasswordResetLink', 'ResetpasswordController@sendEmail');
+    Route::post('changePassword', 'ChangePasswordController@process');
 });
