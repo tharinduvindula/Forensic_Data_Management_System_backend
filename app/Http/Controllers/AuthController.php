@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser','getalluser','getuser','deleteuser','temporydisable']]);
+        $this->middleware('auth:api', ['except' =>['adduser','login','updateuser','getalluser','getuser','deleteuser','temporydisable','defaultpassword']]);
     }
 
     /**
@@ -107,9 +107,9 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => $token
+            //'token_type' => 'bearer',
+            //'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 
@@ -123,7 +123,7 @@ class AuthController extends Controller
 
         $records =DB::table('users')
             ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','id','addingby','lasteditby'
-            ,'temporydisable', 'permenetdisable','photo' )
+            ,'temporydisable', 'permenetdisable','photo','passwordstate' )
             ->orderBy('usertype', 'Desc')
             ->get();
     if($records==null){
@@ -174,6 +174,15 @@ class AuthController extends Controller
             ]
 
         );
+        return response()->json($user);
+
+    }
+
+    public function defaultpassword(Request $request)
+    {
+       $user = User::whereEmail($request->email)->first();
+        $user->update(['password'=>'uosj@123']);
+        $user->update(['passwordstate'=>0]);
         return response()->json($user);
 
     }
