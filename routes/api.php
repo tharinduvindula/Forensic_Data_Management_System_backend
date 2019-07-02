@@ -35,4 +35,10 @@ Route::group([
     Route::post('removmultiuserhandle', 'multiuserhandle@removefromuserprofilehandle');
     Route::post('sendPasswordResetLink', 'ResetpasswordController@sendEmail');
     Route::post('changePassword', 'ChangePasswordController@process');
+    Route::post('addDemo', 'AddDemoController@addDemo');
+    Route::post('deletedemo', 'AddDemoController@deletedemo');
+    Route::get('getalldemo', 'AddDemoController@getalldemo');
+    Route::post('getdemo', 'AddDemoController@getdemo');
+    Route::post('updateDemo', 'AddDemoController@updatedemo');
+
 });
