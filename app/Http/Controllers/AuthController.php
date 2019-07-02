@@ -122,7 +122,7 @@ class AuthController extends Controller
     public function getalluser(){
 
         $records =DB::table('users')
-            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','id','addingby','lasteditby'
+            ->select('usertype','fullname', 'firstname','lastname','nic','sex','email','address','telephone','startdate','enddate','id','addingby','lasteditby'
             ,'temporydisable', 'permenetdisable','photo','passwordstate' )
             ->orderBy('usertype', 'Desc')
             ->get();
@@ -200,11 +200,13 @@ class AuthController extends Controller
                 'firstname' => $request->get('firstname'),
                 'lastname' => $request->get('lastname'),
                 'address' => $request->get('address'),
+                'nic' => $request->get('nic'),
                 'sex' => $request->get('sex'),
                 'email' => $request->get('email'),
                 'telephone' => $request->get('telephone'),
                 'lasteditby' => $request->get('lasteditby'),
                 'photo' => $request->get('photo'),
+                'usertype' => $request->get('usertype'),
 
 
 
