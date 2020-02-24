@@ -40,5 +40,10 @@ Route::group([
     Route::get('getalldemo', 'AddDemoController@getalldemo');
     Route::post('getdemo', 'AddDemoController@getdemo');
     Route::post('updateDemo', 'AddDemoController@updatedemo');
+    Route::post('addpolicedetails', 'deceased@addpolice');
+    Route::post('adddeceaseddetails', 'deceased@adddeceased');
+    Route::post('addcoronerdetails', 'deceased@addcoroner');
+    Route::get('getalldeceased', 'deceased@getalldeceased');
+
 
 });
