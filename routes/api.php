@@ -43,6 +43,8 @@ Route::group([
     Route::post('addpolicedetails', 'deceased@addpolice');
     Route::post('adddeceaseddetails', 'deceased@adddeceased');
     Route::post('addcoronerdetails', 'deceased@addcoroner');
+    Route::post('addcoddetails', 'deceased@addcod');
+    Route::post('addsamplesdetails', 'deceased@addsamples');
     Route::get('getalldeceased', 'deceased@getalldeceased');
 
 

@@ -58,6 +58,24 @@ class deceased extends Controller
 
             ]);
     }
+    function addcod(Request $request){
+        DB::table('cod')->insert([
+                "srjno" => $request->input('srjno'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+    
+    
+                ]);
+    }
+    function addsamples(Request $request){
+        DB::table('samples')->insert([
+                "srjno" => $request->input('srjno'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+    
+    
+                ]);
+    }
 
     public function getalldeceased(){
 
