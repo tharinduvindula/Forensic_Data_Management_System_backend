@@ -61,10 +61,15 @@ class deceased extends Controller
     function addcod(Request $request){
         DB::table('cod')->insert([
                 "srjno" => $request->input('srjno'),
+                "a"=>$request->input('a'),
+                "b"=>$request->input('b'),
+                "c"=>$request->input('c'),
+                "contributory_cause"=>$request->input('contributory_cause'),
+                "other_comments"=>$request->input('other_comments'),
+                "cod"=>$request->input('cod'),
+                "circumstances"=>$request->input('circumstances'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
-    
-    
                 ]);
     }
     function addsamples(Request $request){
