@@ -75,10 +75,22 @@ class deceased extends Controller
     function addsamples(Request $request){
         DB::table('samples')->insert([
                 "srjno" => $request->input('srjno'),
+                "gactnumber" => $request->input('gactnumber'),
+                "gaanalysis" => $request->input('gaanalysis'),
+                "gadate" => $request->input('gadate'),
+                "gatime" => $request->input('gatime'),
+                "mrirefnum" => $request->input('mrirefnum'),
+                "mrianalysis" => $request->input('mrianalysis'),
+                "mridate" => $request->input('mridate'),
+                "mritime" => $request->input('mritime'),
+                "otherrefnum" => $request->input('otherrefnum'),
+                "otheranalysis" => $request->input('otheranalysis'),
+                "otherdate" => $request->input('otherdate'),
+                "othertime" => $request->input('othertime'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
-    
-    
+
+
                 ]);
     }
 
