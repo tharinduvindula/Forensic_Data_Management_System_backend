@@ -14,7 +14,6 @@ class Deceaseddetails extends Migration
     public function up()
     {
     Schema::create('deceased', function (Blueprint $table) {
-                $table->bigIncrements('id');
                 $table->string('srjno');
                 $table->date('pmdate');
                 $table->time('pmtime');
