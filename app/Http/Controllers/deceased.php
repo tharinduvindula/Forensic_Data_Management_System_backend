@@ -78,8 +78,8 @@ class deceased extends Controller
             return response()->json(['error' => 'somthing wrong'], 401);
         }
     }
-    function addsamples(Request $request){        
-            
+    function addsamples(Request $request){
+
             $records =DB::table('ga')->insert([
                 "srjno" => $request->input('srjno'),
                 "ctnumber" => $request->input('gactnumber'),
@@ -103,7 +103,7 @@ class deceased extends Controller
                 return response()->json(['error' => 'somthing wrong'], 401);
             }
 
-        
+
         $records =DB::table('samples')->insert([
                 "srjno" => $request->input('srjno'),
                 "gactnumber" => $request->input('gactnumber'),
@@ -176,7 +176,7 @@ class deceased extends Controller
                 return response()->json(['error' => 'somthing wrong'], 401);
             }
 
-        
+
             $mrispecimens=$request->input('mrispecimens');
             $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
             $other=0;$stomachcontents=0;$vitreoushumor=0;$intestinalcontents=0;$brain=0;
@@ -231,7 +231,7 @@ class deceased extends Controller
                 return response()->json(['error' => 'somthing wrong'], 401);
             }
 
-        
+
             $otherspecimens=$request->input('otherspecimens');
             $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
             $other=0;$stomachcontents=0;$vitreoushumor=0;$intestinalcontents=0;$brain=0;
@@ -291,13 +291,134 @@ class deceased extends Controller
         }
 
     }
-        
+
 
     public function getalldeceased(){
 
         $records =DB::table('deceased')
             ->select('srjno','fullname' )
             ->get();
+        if($records==null){
+            return response()->json(['error' => 'somthing wrong'], 401);
+        }
+        return response()->json($records);
+
+    }
+
+    public function getdeceased(Request $request){
+
+        $records =DB::table('deceased')
+            ->join('police', 'deceased.srjno', '=', 'police.srjno')
+            ->join('coroner', 'deceased.srjno', '=', 'coroner.srjno')
+            ->join('cod', 'deceased.srjno', '=', 'cod.srjno')
+            ->join('samples', 'deceased.srjno', '=', 'samples.srjno')
+            ->select('deceased.srjno','deceased.fullname', 'deceased.pmdate', 'deceased.pmtime',
+            'police.policefullname', 'police.policetag', 'police.policearea', 'police.policescenephoto', 'police.policefoldername',
+            'coroner.coronerordergivenby', 'coroner.coronerfullname', 'coroner.coronerarea',
+            'cod.a', 'cod.b', 'cod.c', 'cod.contributory_cause', 'cod.other_comments', 'cod.circumstances',
+            'samples.gactnumber', 'samples.gadate', 'samples.gatime', 'samples.mrirefnum', 'samples.mridate', 'samples.mritime', 'samples.otherrefnum', 'samples.otherdate', 'samples.othertime')
+            ->where('deceased.srjno','=',request(['srjno']))
+            ->first();
+
+        $records1 =DB::table('samples')
+            ->join('ga', 'samples.gactnumber', '=', 'ga.ctnumber')
+            ->where('samples.srjno','=',request(['srjno']))
+            ->first();
+        $list = array();
+        if($records1->blood==1)
+            array_push($list, 'Blood');
+        if($records1->medicine==1)
+            array_push($list, 'Tablets/Medicines');
+        if($records1->stomachcontents==1)
+            array_push($list, 'Stomach Contents');
+        if($records1->liver==1)
+            array_push($list, 'Liver');
+        if($records1->suspectedpoison==1)
+            array_push($list, 'Suspected Poison');
+        if($records1->urine==1)
+            array_push($list, 'Urine');
+        if($records1->kidney==1)
+            array_push($list, 'Kidney');
+        if($records1->bile==1)
+            array_push($list, 'Bile');
+        if($records1->lungs==1)
+            array_push($list, 'Lungs');
+        if($records1->other==1)
+            array_push($list, 'Other (Specify)');
+        if($records1->vitreoushumor==1)
+            array_push($list, 'Vitreous humor');
+        if($records1->intestinalcontents==1)
+            array_push($list, 'Intestinal Contents');
+        if($records1->brain==1)
+            array_push($list, 'Brain');
+        $records->gaspecimens=$list;
+
+        $records1 =DB::table('samples')
+            ->join('mri', 'samples.mrirefnum', '=', 'mri.refnumber')
+            ->where('samples.srjno','=',request(['srjno']))
+            ->first();
+        $list = array();
+        if($records1->blood==1)
+            array_push($list, 'Blood');
+        if($records1->medicine==1)
+            array_push($list, 'Tablets/Medicines');
+        if($records1->stomachcontents==1)
+            array_push($list, 'Stomach Contents');
+        if($records1->liver==1)
+            array_push($list, 'Liver');
+        if($records1->suspectedpoison==1)
+            array_push($list, 'Suspected Poison');
+        if($records1->urine==1)
+            array_push($list, 'Urine');
+        if($records1->kidney==1)
+            array_push($list, 'Kidney');
+        if($records1->bile==1)
+            array_push($list, 'Bile');
+        if($records1->lungs==1)
+            array_push($list, 'Lungs');
+        if($records1->other==1)
+            array_push($list, 'Other (Specify)');
+        if($records1->vitreoushumor==1)
+            array_push($list, 'Vitreous humor');
+        if($records1->intestinalcontents==1)
+            array_push($list, 'Intestinal Contents');
+        if($records1->brain==1)
+            array_push($list, 'Brain');
+        $records->mrispecimens=$list;
+
+        $records1 =DB::table('samples')
+            ->join('other', 'samples.otherrefnum', '=', 'other.refnumber')
+            ->where('samples.srjno','=',request(['srjno']))
+            ->first();
+        $list = array();
+        if($records1->blood==1)
+            array_push($list, 'Blood');
+        if($records1->medicine==1)
+            array_push($list, 'Tablets/Medicines');
+        if($records1->stomachcontents==1)
+            array_push($list, 'Stomach Contents');
+        if($records1->liver==1)
+            array_push($list, 'Liver');
+        if($records1->suspectedpoison==1)
+            array_push($list, 'Suspected Poison');
+        if($records1->urine==1)
+            array_push($list, 'Urine');
+        if($records1->kidney==1)
+            array_push($list, 'Kidney');
+        if($records1->bile==1)
+            array_push($list, 'Bile');
+        if($records1->lungs==1)
+            array_push($list, 'Lungs');
+        if($records1->other==1)
+            array_push($list, 'Other (Specify)');
+        if($records1->vitreoushumor==1)
+            array_push($list, 'Vitreous humor');
+        if($records1->intestinalcontents==1)
+            array_push($list, 'Intestinal Contents');
+        if($records1->brain==1)
+            array_push($list, 'Brain');
+        $records->otherspecimens=$list;
+
         if($records==null){
             return response()->json(['error' => 'somthing wrong'], 401);
         }

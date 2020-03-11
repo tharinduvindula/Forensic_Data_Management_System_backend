@@ -46,6 +46,7 @@ Route::group([
     Route::post('addcoddetails', 'deceased@addcod');
     Route::post('addsamplesdetails', 'deceased@addsamples');
     Route::get('getalldeceased', 'deceased@getalldeceased');
-
+    Route::get('getalldeceased', 'deceased@getalldeceased');
+    Route::post('getdeceased', 'deceased@getdeceased');
 
 });
