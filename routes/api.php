@@ -40,13 +40,10 @@ Route::group([
     Route::get('getalldemo', 'AddDemoController@getalldemo');
     Route::post('getdemo', 'AddDemoController@getdemo');
     Route::post('updateDemo', 'AddDemoController@updatedemo');
-    Route::post('addpolicedetails', 'deceased@addpolice');
     Route::post('adddeceaseddetails', 'deceased@adddeceased');
-    Route::post('addcoronerdetails', 'deceased@addcoroner');
-    Route::post('addcoddetails', 'deceased@addcod');
-    Route::post('addsamplesdetails', 'deceased@addsamples');
     Route::get('getalldeceased', 'deceased@getalldeceased');
     Route::get('getalldeceased', 'deceased@getalldeceased');
+    Route::post('getdeceased', 'deceased@getdeceased');
     Route::post('getdeceased', 'deceased@getdeceased');
 
 });
