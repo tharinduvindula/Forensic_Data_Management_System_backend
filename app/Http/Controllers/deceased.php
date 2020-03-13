@@ -31,7 +31,7 @@ class deceased extends Controller
                     "policerank" => $request->input('policerank'),
                     "policephoneno" => $request->input('policephoneno'),
                     "policescenephoto" => $request->input('policescenephoto'),
-                    "policefoldername" => $request->input('policefoldername'),                    
+                    "policefoldername" => $request->input('policefoldername'),
                     "coronerfullname" => $request->input('coronerfullname'),
                     "coronerarea" => $request->input('coronerarea'),
                     "coronerordergivenby" => $request->input('coronerordergivenby'),
@@ -108,7 +108,7 @@ class deceased extends Controller
                                 "brain"=>$brain,
                                 'created_at' => Carbon::now(),
                                 'updated_at' => Carbon::now()
-                                ]); 
+                                ]);
 
                                 $mrispecimens=$request->input('mrispecimens');
                                 $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -160,7 +160,7 @@ class deceased extends Controller
                                             "brain"=>$brain,
                                             'created_at' => Carbon::now(),
                                             'updated_at' => Carbon::now()
-                                            ]); 
+                                            ]);
 
                                             $otherspecimens=$request->input('otherspecimens');
                                             $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -212,7 +212,7 @@ class deceased extends Controller
                                                         "brain"=>$brain,
                                                         'created_at' => Carbon::now(),
                                                         'updated_at' => Carbon::now()
-                                                        ]); 
+                                                        ]);
         }
         catch (\Throwable $e){
             //return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -227,10 +227,10 @@ class deceased extends Controller
 
     public function getalldeceased(){
         try{
-            $records =DB::table('deceased')
+            $records =DB::table('add_deceased')
                 ->select('srjno','fullname' )
                 ->get();
-        }catch(\Throwable $e){          
+        }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         if($records==null){
@@ -242,30 +242,26 @@ class deceased extends Controller
 
     public function getdeceased(Request $request){
         try{
-            $records =DB::table('deceased')
-                ->join('police', 'deceased.srjno', '=', 'police.srjno')
-                ->join('coroner', 'deceased.srjno', '=', 'coroner.srjno')
-                ->join('cod', 'deceased.srjno', '=', 'cod.srjno')
-                ->join('samples', 'deceased.srjno', '=', 'samples.srjno')
-                ->select('deceased.srjno','deceased.fullname', 'deceased.pmdate', 'deceased.pmtime',
-                'police.policefullname', 'police.policetag', 'police.policearea', 'police.policescenephoto', 'police.policefoldername',
-                'coroner.coronerordergivenby', 'coroner.coronerfullname', 'coroner.coronerarea',
-                'cod.a', 'cod.b', 'cod.c', 'cod.contributory_cause', 'cod.other_comments', 'cod.circumstances',
-                'samples.gactnumber', 'samples.gadate', 'samples.gatime', 'samples.mrirefnum', 'samples.mridate', 'samples.mritime', 'samples.otherrefnum', 'samples.otherdate', 'samples.othertime')
-                ->where('deceased.srjno','=',request(['srjno']))
+            $records =DB::table('add_deceased')
+                ->select('add_deceased.srjno','add_deceased.fullname', 'add_deceased.pmdate', 'add_deceased.pmtime', 'add_deceased.age', 'add_deceased.sex', 'add_deceased.address', 'add_deceased.contactnumber',
+                'add_deceased.policefullname', 'add_deceased.policetag', 'add_deceased.policearea', 'add_deceased.policescenephoto', 'add_deceased.policefoldername',
+                'add_deceased.coronerordergivenby', 'add_deceased.coronerfullname', 'add_deceased.coronerarea',
+                'add_deceased.a', 'add_deceased.b', 'add_deceased.c', 'add_deceased.contributory_cause', 'add_deceased.other_comments', 'add_deceased.circumstances',
+                'add_deceased.gactnumber', 'add_deceased.gadate', 'add_deceased.gatime', 'add_deceased.mrirefnum', 'add_deceased.mridate', 'add_deceased.mritime', 'add_deceased.otherrefnum', 'add_deceased.otherdate', 'add_deceased.othertime')
+                ->where('add_deceased.srjno','=',request(['srjno']))
                 ->first();
-        }catch(\Throwable $e){        
+        }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         if($records==null){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         try{
-            $records1 =DB::table('samples')
-                ->join('ga', 'samples.gactnumber', '=', 'ga.ctnumber')
-                ->where('samples.srjno','=',request(['srjno']))
+            $records1 =DB::table('add_deceased')
+                ->join('ga', 'add_deceased.gactnumber', '=', 'ga.ctnumber')
+                ->where('add_deceased.srjno','=',request(['srjno']))
                 ->first();
-        }catch(\Throwable $e){      
+        }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         if($records1==null){
@@ -300,11 +296,11 @@ class deceased extends Controller
             array_push($list, 'Brain');
         $records->gaspecimens=$list;
         try{
-            $records1 =DB::table('samples')
-                ->join('mri', 'samples.mrirefnum', '=', 'mri.refnumber')
-                ->where('samples.srjno','=',request(['srjno']))
+            $records1 =DB::table('add_deceased')
+                ->join('mri', 'add_deceased.mrirefnum', '=', 'mri.refnumber')
+                ->where('add_deceased.srjno','=',request(['srjno']))
                 ->first();
-        }catch(\Throwable $e){        
+        }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         if($records1==null){
@@ -339,11 +335,11 @@ class deceased extends Controller
             array_push($list, 'Brain');
         $records->mrispecimens=$list;
         try{
-            $records1 =DB::table('samples')
-                ->join('other', 'samples.otherrefnum', '=', 'other.refnumber')
-                ->where('samples.srjno','=',request(['srjno']))
+            $records1 =DB::table('add_deceased')
+                ->join('other', 'add_deceased.otherrefnum', '=', 'other.refnumber')
+                ->where('add_deceased.srjno','=',request(['srjno']))
                 ->first();
-        }catch(\Throwable $e){       
+        }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
         }
         if($records1==null){
