@@ -11,7 +11,7 @@ use DB;
 class deceased extends Controller
 {
     function adddeceased(Request $request){
-        $exists = DB::table('deceased')->where('srjno','=',request(['srjno']))->first();
+        $exists = DB::table('add_deceased')->where('srjno','=',request(['srjno']))->first();
         if($exists){
             return response()->json(['error' => 'SRJ no already exists'], 401);
         }
