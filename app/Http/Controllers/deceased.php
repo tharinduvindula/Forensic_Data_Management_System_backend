@@ -46,14 +46,17 @@ class deceased extends Controller
                     "gaanalysis" => $request->input('gaanalysis'),
                     "gadate" => $request->input('gadate'),
                     "gatime" => $request->input('gatime'),
+                    "gaanalysis" => $request->input('gaanalysis'),
                     "mrirefnum" => $request->input('mrirefnum'),
                     "mrianalysis" => $request->input('mrianalysis'),
                     "mridate" => $request->input('mridate'),
                     "mritime" => $request->input('mritime'),
+                    "mrianalysis" => $request->input('mrianalysis'),
                     "otherrefnum" => $request->input('otherrefnum'),
                     "otheranalysis" => $request->input('otheranalysis'),
                     "otherdate" => $request->input('otherdate'),
                     "othertime" => $request->input('othertime'),
+                    "otheranalysis" => $request->input('otheranalysis'),
                     "addingby" => $request->input('addingby'),
                     "lasteditby" => $request->input('lasteditby'),
                     'created_at' => Carbon::now(),
@@ -114,7 +117,7 @@ class deceased extends Controller
                                 "intestinalcontents"=>$intestinalcontents,
                                 "brain"=>$brain,
                                 ]);
-                                
+
                                 $exists = DB::table('mri')->where('refnumber','=',request(['mrirefnum']))->first();
                                 if($exists){
                                     return response()->json(['error' => 'mri ref'], 401);
@@ -256,10 +259,10 @@ class deceased extends Controller
         try{
             $records =DB::table('add_deceased')
                 ->select('add_deceased.srjno','add_deceased.fullname', 'add_deceased.pmdate', 'add_deceased.pmtime', 'add_deceased.age', 'add_deceased.sex', 'add_deceased.address', 'add_deceased.contactnumber',
-                'add_deceased.policefullname', 'add_deceased.policetag', 'add_deceased.policearea', 'add_deceased.policescenephoto', 'add_deceased.policefoldername',
+                'add_deceased.policefullname', 'add_deceased.policetag', 'add_deceased.policearea','add_deceased.policerank','add_deceased.policephoneno', 'add_deceased.policescenephoto', 'add_deceased.policefoldername',
                 'add_deceased.coronerordergivenby', 'add_deceased.coronerfullname', 'add_deceased.coronerarea',
                 'add_deceased.a', 'add_deceased.b', 'add_deceased.c', 'add_deceased.contributory_cause', 'add_deceased.other_comments', 'add_deceased.cod', 'add_deceased.circumstances',
-                'add_deceased.gactnumber', 'add_deceased.gadate', 'add_deceased.gatime', 'add_deceased.mrirefnum', 'add_deceased.mridate', 'add_deceased.mritime', 'add_deceased.otherrefnum', 'add_deceased.otherdate', 'add_deceased.othertime')
+                'add_deceased.gactnumber', 'add_deceased.gadate', 'add_deceased.gatime', 'add_deceased.gaanalysis', 'add_deceased.mrirefnum', 'add_deceased.mridate', 'add_deceased.mritime', 'add_deceased.mrianalysis', 'add_deceased.otherrefnum', 'add_deceased.otherdate', 'add_deceased.othertime', 'add_deceased.otheranalysis')
                 ->where([['add_deceased.srjno','=',request(['srjno'])],['add_deceased.active','=',1]])
                 ->first();
         }catch(\Throwable $e){
