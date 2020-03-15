@@ -29,7 +29,6 @@ class CreateOtherTable extends Migration
             $table->integer('vitreoushumor');
             $table->integer('intestinalcontents');
             $table->integer('brain');
-            $table->timestamps();
         });
     }
 

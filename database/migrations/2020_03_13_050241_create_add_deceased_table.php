@@ -53,7 +53,10 @@ class CreateAddDeceasedTable extends Migration
             $table->string('othertime'); 
             $table->foreign('gactnumber')->references('ctnumber')->on('ga');
             $table->foreign('mrirefnum')->references('refnumber')->on('mri');
-            $table->foreign('otherrefnum')->references('refnumber')->on('other');
+            $table->foreign('otherrefnum')->references('refnumber')->on('other');   
+            $table->string('addingby');
+            $table->string('lasteditby');            ;
+            $table->integer('active')->default(1);
             $table->timestamps();
         });
     }

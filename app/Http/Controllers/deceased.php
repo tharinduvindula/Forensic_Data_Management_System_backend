@@ -54,9 +54,16 @@ class deceased extends Controller
                     "otheranalysis" => $request->input('otheranalysis'),
                     "otherdate" => $request->input('otherdate'),
                     "othertime" => $request->input('othertime'),
+                    "addingby" => $request->input('addingby'),
+                    "lasteditby" => $request->input('lasteditby'),
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                     ]);
+
+                    $exists = DB::table('ga')->where('ctnumber','=',request(['gactnumber']))->first();
+                    if($exists){
+                        return response()->json(['error' => 'ga ct'], 401);
+                    }
 
                     $gaspecimens=$request->input('gaspecimens');
                     $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -106,9 +113,12 @@ class deceased extends Controller
                                 "vitreoushumor"=>$vitreoushumor,
                                 "intestinalcontents"=>$intestinalcontents,
                                 "brain"=>$brain,
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now()
                                 ]);
+                                
+                                $exists = DB::table('mri')->where('refnumber','=',request(['mrirefnum']))->first();
+                                if($exists){
+                                    return response()->json(['error' => 'mri ref'], 401);
+                                }
 
                                 $mrispecimens=$request->input('mrispecimens');
                                 $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -158,9 +168,12 @@ class deceased extends Controller
                                             "vitreoushumor"=>$vitreoushumor,
                                             "intestinalcontents"=>$intestinalcontents,
                                             "brain"=>$brain,
-                                            'created_at' => Carbon::now(),
-                                            'updated_at' => Carbon::now()
                                             ]);
+
+                                            $exists = DB::table('other')->where('refnumber','=',request(['otherrefnum']))->first();
+                                            if($exists){
+                                                return response()->json(['error' => 'other ref'], 401);
+                                            }
 
                                             $otherspecimens=$request->input('otherspecimens');
                                             $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -210,8 +223,6 @@ class deceased extends Controller
                                                         "vitreoushumor"=>$vitreoushumor,
                                                         "intestinalcontents"=>$intestinalcontents,
                                                         "brain"=>$brain,
-                                                        'created_at' => Carbon::now(),
-                                                        'updated_at' => Carbon::now()
                                                         ]);
         }
         catch (\Throwable $e){
@@ -228,7 +239,8 @@ class deceased extends Controller
     public function getalldeceased(){
         try{
             $records =DB::table('add_deceased')
-                ->select('srjno','fullname' )
+                ->select('srjno','fullname','addingby','lasteditby' )
+                ->where('add_deceased.active','=',1)
                 ->get();
         }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -246,9 +258,9 @@ class deceased extends Controller
                 ->select('add_deceased.srjno','add_deceased.fullname', 'add_deceased.pmdate', 'add_deceased.pmtime', 'add_deceased.age', 'add_deceased.sex', 'add_deceased.address', 'add_deceased.contactnumber',
                 'add_deceased.policefullname', 'add_deceased.policetag', 'add_deceased.policearea', 'add_deceased.policescenephoto', 'add_deceased.policefoldername',
                 'add_deceased.coronerordergivenby', 'add_deceased.coronerfullname', 'add_deceased.coronerarea',
-                'add_deceased.a', 'add_deceased.b', 'add_deceased.c', 'add_deceased.contributory_cause', 'add_deceased.other_comments', 'add_deceased.circumstances',
+                'add_deceased.a', 'add_deceased.b', 'add_deceased.c', 'add_deceased.contributory_cause', 'add_deceased.other_comments', 'add_deceased.cod', 'add_deceased.circumstances',
                 'add_deceased.gactnumber', 'add_deceased.gadate', 'add_deceased.gatime', 'add_deceased.mrirefnum', 'add_deceased.mridate', 'add_deceased.mritime', 'add_deceased.otherrefnum', 'add_deceased.otherdate', 'add_deceased.othertime')
-                ->where('add_deceased.srjno','=',request(['srjno']))
+                ->where([['add_deceased.srjno','=',request(['srjno'])],['add_deceased.active','=',1]])
                 ->first();
         }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -259,7 +271,7 @@ class deceased extends Controller
         try{
             $records1 =DB::table('add_deceased')
                 ->join('ga', 'add_deceased.gactnumber', '=', 'ga.ctnumber')
-                ->where('add_deceased.srjno','=',request(['srjno']))
+                ->where([['add_deceased.srjno','=',request(['srjno'])],['add_deceased.active','=',1]])
                 ->first();
         }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -298,7 +310,7 @@ class deceased extends Controller
         try{
             $records1 =DB::table('add_deceased')
                 ->join('mri', 'add_deceased.mrirefnum', '=', 'mri.refnumber')
-                ->where('add_deceased.srjno','=',request(['srjno']))
+                ->where([['add_deceased.srjno','=',request(['srjno'])],['add_deceased.active','=',1]])
                 ->first();
         }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -337,7 +349,7 @@ class deceased extends Controller
         try{
             $records1 =DB::table('add_deceased')
                 ->join('other', 'add_deceased.otherrefnum', '=', 'other.refnumber')
-                ->where('add_deceased.srjno','=',request(['srjno']))
+                ->where([['add_deceased.srjno','=',request(['srjno'])],['add_deceased.active','=',1]])
                 ->first();
         }catch(\Throwable $e){
             return response()->json(['error' => 'Oops something went wrong!'], 401);
@@ -375,6 +387,27 @@ class deceased extends Controller
         $records->otherspecimens=$list;
 
         return response()->json($records);
+
+    }
+    public function deletedeceased(Request $request){
+        try{
+            $records=DB::table('add_deceased')->updateOrInsert(
+                [
+                    'srjno' => $request->get('srjno'),
+                    'active' => 1,
+                ],
+                [
+                    'active' => 0,
+                    'lasteditby' => $request->input('deleteby'),
+                    'updated_at' => Carbon::now()
+                ]);
+        }catch(\Throwable $e){
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+        if($records==null){
+            return response()->json(['error' => 'Oops something went wrong!'], 401);
+        }
+        return response()->json(["message"=>"success"]);
 
     }
 }
