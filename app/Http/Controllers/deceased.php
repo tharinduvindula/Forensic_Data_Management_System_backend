@@ -15,6 +15,22 @@ class deceased extends Controller
         if($exists){
             return response()->json(['error' => 'SRJ no already exists'], 401);
         }
+
+        $exists = DB::table('ga')->where('ctnumber','=',request(['gactnumber']))->first();
+            if($exists){
+                return response()->json(['error' => 'ga ct'], 401);
+            }
+
+        $exists = DB::table('mri')->where('refnumber','=',request(['mrirefnum']))->first();
+            if($exists){
+                return response()->json(['error' => 'mri ref'], 401);
+            }
+
+        $exists = DB::table('other')->where('refnumber','=',request(['otherrefnum']))->first();
+            if($exists){
+                return response()->json(['error' => 'other ref'], 401);
+            }
+
         try{
                 $records =DB::table('add_deceased')->insert([
                     "srjno" => $request->input('srjno'),
@@ -62,11 +78,6 @@ class deceased extends Controller
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                     ]);
-
-                    $exists = DB::table('ga')->where('ctnumber','=',request(['gactnumber']))->first();
-                    if($exists){
-                        return response()->json(['error' => 'ga ct'], 401);
-                    }
 
                     $gaspecimens=$request->input('gaspecimens');
                     $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -118,10 +129,6 @@ class deceased extends Controller
                                 "brain"=>$brain,
                                 ]);
 
-                                $exists = DB::table('mri')->where('refnumber','=',request(['mrirefnum']))->first();
-                                if($exists){
-                                    return response()->json(['error' => 'mri ref'], 401);
-                                }
 
                                 $mrispecimens=$request->input('mrispecimens');
                                 $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
@@ -172,11 +179,6 @@ class deceased extends Controller
                                             "intestinalcontents"=>$intestinalcontents,
                                             "brain"=>$brain,
                                             ]);
-
-                                            $exists = DB::table('other')->where('refnumber','=',request(['otherrefnum']))->first();
-                                            if($exists){
-                                                return response()->json(['error' => 'other ref'], 401);
-                                            }
 
                                             $otherspecimens=$request->input('otherspecimens');
                                             $blood=0;$liver=0;$suspectedpoison=0;$urine=0;$kidney=0;$medicine=0;$bile=0;$lungs=0;
