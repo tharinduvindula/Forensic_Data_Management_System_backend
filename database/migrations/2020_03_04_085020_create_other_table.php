@@ -15,11 +15,11 @@ class CreateOtherTable extends Migration
     {
         Schema::create('other', function (Blueprint $table) {
             $table->string('srjno');
-            $table->string('refnumber');
+            $table->string('refnumber')->primary();
             $table->integer('blood');
             $table->integer('liver');
             $table->integer('suspectedpoison');
-            $table->integer('urine'); 
+            $table->integer('urine');
             $table->integer('kidney');
             $table->integer('medicine');
             $table->integer('bile');

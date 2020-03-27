@@ -15,11 +15,11 @@ class CreateGaTable extends Migration
     {
         Schema::create('ga', function (Blueprint $table) {
             $table->string('srjno');
-            $table->string('ctnumber');
+            $table->string('ctnumber')->primary();
             $table->integer('blood');
             $table->integer('liver');
             $table->integer('suspectedpoison');
-            $table->integer('urine'); 
+            $table->integer('urine');
             $table->integer('kidney');
             $table->integer('medicine');
             $table->integer('bile');
