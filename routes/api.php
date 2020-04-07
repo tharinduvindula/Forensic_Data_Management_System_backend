@@ -46,6 +46,7 @@ Route::group([
     Route::post('getdeceased', 'deceased@getdeceased');
     Route::post('getdeceased', 'deceased@getdeceased');
     Route::post('deletedeceased', 'deceased@deletedeceased');
-    Route::post('updatedeceased', 'deceased@updatedeceased');
+    Route::post('updatedeceased', 'deceased@updatedeceased');    
+    Route::post('GAReportDelays', 'Analysis@GAReportDelays');
 
 });
