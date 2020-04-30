@@ -17,11 +17,13 @@ class Analysis extends Controller
         ->where('coronerordergivenby', '=', 'Coroner')
         ->orWhere('coronerordergivenby', '=', 'Magistrate')
         ->count();
+
+        return response()->json($orders);
     }
 public function GAReportDelays(Request $request){
     try{
         $selects = DB::table('add_deceased')
-        ->select(DB::raw(' `gadate` - `pmdate` AS  Diff'))
+        ->select(DB::raw('DATEDIFF(gadate,pmdate)AS Diff'))
         ->where('address', '=', request(['area']))
         ->get();
 
@@ -67,14 +69,14 @@ public function GAReportDelays(Request $request){
 public function PMReportDelays(Request $request){
     try{
         $selects = DB::table('add_deceased')
-        ->select(DB::raw(' `mridate` - `pmdate` AS  Diff,`otherdate` - `pmdate` AS  Diff2'))
+        ->select(DB::raw('DATEDIFF(mridate,pmdate)AS Diff1, DATEDIFF(otherdate,pmdate)AS Diff2'))
         ->where('address', '=', request(['area']))
         ->get();
 
         $count1=0; $count2=0; $count3=0; $count4=0; $count5=0; $count6=0; $count7=0;
 
         foreach($selects as $select){
-            $x=$select->Diff;
+            $x=$select->Diff1;
             $y=$select->Diff2;
             if($x > 1095)
                 $count1=$count1+1;
