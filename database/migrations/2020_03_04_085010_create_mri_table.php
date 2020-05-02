@@ -15,7 +15,7 @@ class CreateMriTable extends Migration
     {
         Schema::create('mri', function (Blueprint $table) {
             $table->string('srjno');
-            $table->string('refnumber')->primary();
+            $table->string('refnumber');
             $table->integer('blood');
             $table->integer('liver');
             $table->integer('suspectedpoison');
@@ -29,6 +29,8 @@ class CreateMriTable extends Migration
             $table->integer('vitreoushumor');
             $table->integer('intestinalcontents');
             $table->integer('brain');
+            $table->timestamp('updated_at');
+            $table->primary(array('refnumber', 'updated_at'));
         });
     }
 

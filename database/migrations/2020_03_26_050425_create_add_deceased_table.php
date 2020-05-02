@@ -14,7 +14,7 @@ class CreateAddDeceasedTable extends Migration
     public function up()
     {
         Schema::create('add_deceased', function (Blueprint $table) {
-            $table->string('srjno')->primary();
+            $table->string('srjno');
             $table->date('pmdate');
             $table->time('pmtime');
             $table->string('fullname');
@@ -56,9 +56,10 @@ class CreateAddDeceasedTable extends Migration
             $table->foreign('mrirefnum')->references('refnumber')->on('mri');
             $table->foreign('otherrefnum')->references('refnumber')->on('other');
             $table->string('addingby');
-            $table->string('lasteditby');            ;
+            $table->string('lasteditby');
             $table->integer('active')->default(1);
-            $table->timestamps();
+            $table->timestamp('updated_at');
+            $table->primary(array('srjno', 'updated_at'));
         });
     }
 

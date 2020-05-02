@@ -15,7 +15,7 @@ class CreateGaTable extends Migration
     {
         Schema::create('ga', function (Blueprint $table) {
             $table->string('srjno');
-            $table->string('ctnumber')->primary();
+            $table->string('ctnumber');
             $table->integer('blood');
             $table->integer('liver');
             $table->integer('suspectedpoison');
@@ -29,6 +29,8 @@ class CreateGaTable extends Migration
             $table->integer('vitreoushumor');
             $table->integer('intestinalcontents');
             $table->integer('brain');
+            $table->timestamp('updated_at');
+            $table->primary(array('ctnumber', 'updated_at'));
         });
     }
 
