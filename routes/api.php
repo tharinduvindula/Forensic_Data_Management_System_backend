@@ -47,5 +47,13 @@ Route::group([
     Route::post('getdeceased', 'deceased@getdeceased');
     Route::post('deletedeceased', 'deceased@deletedeceased');
     Route::post('updatedeceased', 'deceased@updatedeceased');
+    Route::post('GAReportDelays', 'Analysis@GAReportDelays');
+    Route::post('PMReportDelays', 'Analysis@PMReportDelays');
+    Route::post('OrderGivenCount', 'Analysis@OrderGivenCount');
+    Route::post('PoliceReportDelays', 'Analysis@PoliceReportDelays');
+    Route::get('TotalOrders', 'Analysis@TotalOrders');
+    Route::get('TotalPostMortems', 'Analysis@TotalPostMortems');
+    Route::get('ReportDelays', 'Analysis@ReportDelays');
+    Route::get('TotalDeaths', 'Analysis@TotalDeaths');
 
 });

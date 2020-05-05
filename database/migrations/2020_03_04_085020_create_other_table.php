@@ -19,7 +19,7 @@ class CreateOtherTable extends Migration
             $table->integer('blood');
             $table->integer('liver');
             $table->integer('suspectedpoison');
-            $table->integer('urine'); 
+            $table->integer('urine');
             $table->integer('kidney');
             $table->integer('medicine');
             $table->integer('bile');
@@ -29,6 +29,8 @@ class CreateOtherTable extends Migration
             $table->integer('vitreoushumor');
             $table->integer('intestinalcontents');
             $table->integer('brain');
+            $table->timestamp('updated_at');
+            $table->primary(array('refnumber', 'updated_at'));
         });
     }
 
